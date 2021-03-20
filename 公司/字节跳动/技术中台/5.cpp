@@ -4,28 +4,31 @@ using namespace std;
 class Solution {
 public:
     string longestPalindrome(string s) {
-        int n = s.size();
-        vector<vector<int> > dp(n,vector<int>(n));
+        vector<vector<int> > dp(s.size()+1,vector<int>(s.size()+2));
+        int len = 0;
         string ret;
-        for(int l = 0 ;l<n;l++)
+        for(len=0;len<s.size();len++)
         {
-            for(int i = 0;i+l < n;i++)
+            for(int i = 0;i+len<s.size();i++)
             {
-                int j = i+l;
-                if(l==0)
-                    dp[i][i]=1;
-                else if(l==1)
+                int j=i+len;
+                if(j==i+1)
                 {
-                    dp[i][i+1]=(s[i]==s[i+1]);
+                    dp[i][j]=(s[i]==s[j])?1:0;
+                }
+                else if(len==0)
+                {
+                    dp[i][j]=1;
                 }
                 else
                 {
-                    dp[i][j]=((dp[i+1][j-1])&&(s[i]==s[j]));
-                    if(dp[i][j]&&l+1>ret.size())
+                    if(dp[i+1][j-1])
                     {
-                        ret=s.substr(i,l+1);
+                        dp[i][j]=(s[i]==s[j])?1:0;
                     }
                 }
+                 if(dp[i][j]&&len+1>ret.size())
+                            ret = s.substr(i,len+1);
             }
         }
         return ret;
